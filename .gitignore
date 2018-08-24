@@ -3,12 +3,11 @@
 
 *.class
 
-target/
-out/
-mvnw
-mvnw.cmd
-.mvn/
+/out/
+/target/
 
+#mvn
+/.mvn/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
