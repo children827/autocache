@@ -2,6 +2,7 @@ package com.oliver.autocache;
 
 import com.oliver.autocache.annotation.AsKey;
 import com.oliver.autocache.annotation.Cache;
+import com.oliver.autocache.annotation.CacheTime;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class InjectClazz {
 
-    @Cache(baseKey = "")
+    @Cache(baseKey = "",time = CacheTime.TIME_SHORT)
     public String show(@AsKey String s,@AsKey String s1){
         System.out.println("这里显示");
         return "返回";

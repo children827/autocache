@@ -7,27 +7,29 @@
 
 
 1.工具依赖spring框架  
-2.引入jar包后需要自己实现缓存方式：
+2.引入jar包后需要自己注入缓存实现：
 
 ```
-@Component  
-public class CacheHelperImlp implements CacheHelper {
+        @Bean
+	CacheFactory cacheFactory(){
+		return new CacheFactory(new CacheManager() {
 
-    @Override
-    public Object get(String key) {
-        ...
-    }
+			@Override
+			public Object get(String key) {
+				return null;
+			}
 
-    @Override
-    public boolean put(Object obj, String key, long time) {
-        ...
-    }
+			@Override
+			public boolean put(Object obj, String key, long time) {
+				return false;
+			}
 
-    @Override
-    public boolean contain(String key) {
-        ...
-    }
-}
+			@Override
+			public boolean contain(String key) {
+				return false;
+			}
+		});
+	}
 ```
 
 

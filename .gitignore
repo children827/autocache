@@ -3,8 +3,9 @@
 
 *.class
 
-/out/
-/target/
+out/
+target/
+AutoCacheApplication.*
 
 #mvn
 /.mvn/

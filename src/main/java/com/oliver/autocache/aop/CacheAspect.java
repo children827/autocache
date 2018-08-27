@@ -3,7 +3,8 @@ package com.oliver.autocache.aop;
 import com.oliver.autocache.Exception.CacheException;
 import com.oliver.autocache.annotation.AsKey;
 import com.oliver.autocache.annotation.Cache;
-import com.oliver.autocache.cache.CacheHelper;
+import com.oliver.autocache.cache.CacheFactory;
+import com.oliver.autocache.cache.CacheManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,17 +29,18 @@ import java.util.List;
 public class CacheAspect {
 
     @Autowired
-    private CacheHelper cacheHelper;
+    private CacheFactory cacheFactory;
+
 
     /**
      * 切入点
      */
     @Pointcut("@annotation(com.oliver.autocache.annotation.Cache)")
-    public void cache() {
-    }
+    public void cache() { }
 
     @Around("cache()")
     public Object doAroundCache(ProceedingJoinPoint pjp) throws Throwable {
+        CacheManager cacheHelper=cacheFactory.getCacheManager();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Object[] totalArgs = pjp.getArgs();
         Method method = signature.getMethod();
@@ -123,8 +125,9 @@ public class CacheAspect {
 
     /**
      * 获取被注解的参数的值
-     *
-     * @param method
+     * @param method 方法
+     * @param params 所有参数列表
+     * @param clazz 参数注解
      * @return
      * @throws Exception
      */

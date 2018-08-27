@@ -5,7 +5,7 @@ package com.oliver.autocache.cache;
  * @author :Oliver
  * @time :2018/8/20.
  */
-public interface CacheHelper {
+public interface CacheManager {
 
     /**
      * 读取缓存
