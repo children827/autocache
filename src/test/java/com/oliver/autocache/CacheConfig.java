@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
  * @author :Oliver
  * @time :2018/8/24.
  */
-@Configuration
+//@Configuration
 public class CacheConfig {
 
-    @Bean
+    //@Bean
     CacheFactory cacheFactory(){
         return new CacheFactory(new CacheManager() {
 
@@ -22,7 +22,7 @@ public class CacheConfig {
             }
 
             @Override
-            public boolean put(Object obj, String key, long time) {
+            public boolean put(Object obj, String key, int time) {
                 return false;
             }
 

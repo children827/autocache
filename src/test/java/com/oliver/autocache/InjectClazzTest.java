@@ -10,14 +10,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author :Oliver
  * @time :2018/8/20.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class InjectClazzTest {
 
-    @Autowired
+    //@Autowired
     private InjectClazz injectClazz;
 
-    @Test
+    //@Test
     public void show() throws Exception {
         injectClazz.show("入参1","入参2");
     }

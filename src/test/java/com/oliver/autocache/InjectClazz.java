@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
  * @author :Oliver
  * @time :2018/8/20.
  */
-@Controller
+//@Controller
 public class InjectClazz {
 
     @Cache(baseKey = "",time = CacheTime.TIME_SHORT)

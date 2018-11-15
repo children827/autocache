@@ -20,7 +20,7 @@ public interface CacheManager {
      * @param time 缓存时间，单位s
      * @return
      */
-    boolean put(Object obj,String key,long time);
+    void put(Object obj,String key,int time);
 
     /**
      * 判断缓存中是否存在相应的对象

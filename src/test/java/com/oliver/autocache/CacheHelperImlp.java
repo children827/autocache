@@ -14,7 +14,7 @@ public class CacheHelperImlp implements CacheManager {
     }
 
     @Override
-    public boolean put(Object obj, String key, long time) {
+    public boolean put(Object obj, String key, int time) {
         return false;
     }
 

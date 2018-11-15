@@ -44,3 +44,4 @@ hs_err_pid*
 /nbdist/
 /.nb-gradle/
 out/artifacts/autocache/autocache.jar
+pom.xml

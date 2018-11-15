@@ -9,14 +9,14 @@ public class CacheTime {
     /**
      * 缓存时间1s
      */
-    public static final long TIME_SHORT=1;
+    public static final int TIME_SHORT=1;
     /**
      * 缓存时间1min
      */
-    public static final long TIME_MIDDLE=60;
+    public static final int TIME_MIDDLE=60;
     /**
      * 缓存时间1h
      */
-    public static final long TIME_LONG=3600;
+    public static final int TIME_LONG=3600;
 
 }

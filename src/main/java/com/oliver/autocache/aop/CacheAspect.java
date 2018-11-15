@@ -36,11 +36,12 @@ public class CacheAspect {
      * 切入点
      */
     @Pointcut("@annotation(com.oliver.autocache.annotation.Cache)")
-    public void cache() { }
+    public void cache() {
+    }
 
     @Around("cache()")
     public Object doAroundCache(ProceedingJoinPoint pjp) throws Throwable {
-        CacheManager cacheHelper=cacheFactory.getCacheManager();
+        CacheManager cacheHelper = cacheFactory.getCacheManager();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Object[] totalArgs = pjp.getArgs();
         Method method = signature.getMethod();
@@ -49,7 +50,7 @@ public class CacheAspect {
 
 
         String baseKey = cache.baseKey();
-        long time = cache.time();
+        int time = cache.time();
 
         //缓存key
         String key = genKey(totalArgs, method, baseKey);
@@ -63,35 +64,43 @@ public class CacheAspect {
             throw new CacheException("缓存获取出错！", e);
         }
 
-        //运行目标方法
         Object res = null;
-        try {
-            res = pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new CacheException("缓存存储出错！", throwable);
-        }
+        synchronized (pjp.getClass()) {
 
+            //同步方法内再次检查缓存，防止多个线程同时调用
+            res = cacheHelper.get(key);
+            if (null != res) {
+                return res;
+            }
 
-        //结果处理
-        if (null == res) {
-            return res;
-        }
-        try {
-            cacheHelper.put(res, key, time);
-        } catch (Exception e) {
-            throw new CacheException("缓存存储出错！", e);
-        }
+            //运行目标方法
+            try {
+                res = pjp.proceed();
+            } catch (Throwable throwable) {
+                throw new CacheException("方法调用出错！", throwable);
+            }
 
+            //结果处理
+            if (null == res) {
+                return res;
+            }
+            try {
+                cacheHelper.put(res, key, time);
+            } catch (Exception e) {
+                throw new CacheException("缓存存储出错！", e);
+            }
+        }
         return res;
     }
 
     /**
      * 生成作为缓存的key
      * 生成策略：
-     *      如果@Cache注解设置baseKey属性不为""，则将baseKey与本方法中被@AsKey标记的参数(只能是基本数据类型)拼接，
-     *      拼接形式为“baseKey_参数1_参数2...”；
-     *      如果@Cache注解设置baseKey属性为""，则将方法签名与本方法中被@AsKey标记的参数(只能是基本数据类型)拼接，
-     *      拼接形式为“方法签名_参数1_参数2...”；
+     * 如果@Cache注解设置baseKey属性不为""，则将baseKey与本方法中被@AsKey标记的参数(只能是基本数据类型)拼接，
+     * 拼接形式为“baseKey_参数1_参数2...”；
+     * 如果@Cache注解设置baseKey属性为""，则将方法签名与本方法中被@AsKey标记的参数(只能是基本数据类型)拼接，
+     * 拼接形式为“方法签名_参数1_参数2...”；
+     *
      * @param totalArgs
      * @param method
      * @param baseKey
@@ -100,7 +109,7 @@ public class CacheAspect {
      */
     private String genKey(Object[] totalArgs, Method method, String baseKey) throws Exception {
         //获取方法中被@AsKey注解的参数值并拼接
-        List<Object> args = getParamValueByAnnotation(method,totalArgs , AsKey.class);
+        List<Object> args = getParamValueByAnnotation(method, totalArgs, AsKey.class);
         String argKey = "";
         for (Object s : args) {
             try {
@@ -125,9 +134,10 @@ public class CacheAspect {
 
     /**
      * 获取被注解的参数的值
+     *
      * @param method 方法
      * @param params 所有参数列表
-     * @param clazz 参数注解
+     * @param clazz  参数注解
      * @return
      * @throws Exception
      */

@@ -31,7 +31,7 @@ public @interface Cache {
      *
      * @return
      */
-    long time() default CacheTime.TIME_MIDDLE;
+    int time() default CacheTime.TIME_MIDDLE;
 
 
 }
