@@ -6,6 +6,11 @@ package com.oliver.autocache.annotation;
  * @time :2018/8/20.
  */
 public class CacheTime {
+
+    /**
+     * 缓存时间0，代表不设置时间
+     */
+    public static final int TIME_NONE=0;
     /**
      * 缓存时间1s
      */

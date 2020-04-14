@@ -1,21 +1,22 @@
 package com.oliver.autocache;
 
 import com.oliver.autocache.cache.CacheManager;
+import org.springframework.stereotype.Component;
 
 /**
  * @author :Oliver
  * @time :2018/8/21.
  */
-//@Component
-public class CacheHelperImlp implements CacheManager {
+@Component
+public class CacheHelperImpl implements CacheManager {
     @Override
     public Object get(String key) {
         return null;
     }
 
     @Override
-    public boolean put(Object obj, String key, int time) {
-        return false;
+    public void put(Object obj, String key, int time) {
+        System.out.println("存入缓存："+obj + key + time);
     }
 
     @Override

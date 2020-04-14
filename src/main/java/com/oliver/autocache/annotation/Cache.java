@@ -27,11 +27,11 @@ public @interface Cache {
     String baseKey() default "";
 
     /**
-     * 缓存时间，默认为30s，参考{CacheTime},也可以自定义
+     * 缓存时间，默认为0，即不设置超时时间，参考{CacheTime},也可以自定义
      *
      * @return
      */
-    int time() default CacheTime.TIME_MIDDLE;
+    int time() default CacheTime.TIME_NONE;
 
 
 }

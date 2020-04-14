@@ -48,10 +48,9 @@ public class CacheAspect {
 
         Cache cache = method.getAnnotation(Cache.class);
 
-
-        String baseKey = cache.baseKey();
         int time = cache.time();
 
+        String baseKey = cache.baseKey();
         //缓存key
         String key = genKey(totalArgs, method, baseKey);
 
@@ -61,14 +60,22 @@ public class CacheAspect {
                 return cacheHelper.get(key);
             }
         } catch (Exception e) {
-            throw new CacheException("缓存获取出错！", e);
+            //选择catch而不抛出的考虑是因为缓存属于附属功能，不应该影响正常业务程序的调用
+            e.printStackTrace();
+            //throw new CacheException("缓存获取出错！", e);
         }
+
 
         Object res = null;
         synchronized (pjp.getClass()) {
 
             //同步方法内再次检查缓存，防止多个线程同时调用
+            try {
+
             res = cacheHelper.get(key);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             if (null != res) {
                 return res;
             }
@@ -87,6 +94,7 @@ public class CacheAspect {
             try {
                 cacheHelper.put(res, key, time);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new CacheException("缓存存储出错！", e);
             }
         }
