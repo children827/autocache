@@ -54,6 +54,11 @@ public class CacheAspect {
         //缓存key
         String key = genKey(totalArgs, method, baseKey);
 
+        //如果condition注解标记的参数为false，则不使用换成，直接运行返回
+        if (!genCondition(totalArgs, method)) {
+            return pjp.proceed();
+        }
+
         //缓存处理
         try {
             if (cacheHelper.contain(key)) {
@@ -72,8 +77,8 @@ public class CacheAspect {
             //同步方法内再次检查缓存，防止多个线程同时调用
             try {
 
-            res = cacheHelper.get(key);
-            }catch (Exception e){
+                res = cacheHelper.get(key);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if (null != res) {
@@ -100,6 +105,16 @@ public class CacheAspect {
         }
         return res;
     }
+
+
+    private boolean genCondition(Object[] totalArgs, Method method) throws Exception {
+        List<Object> args = getParamValueByAnnotation(method, totalArgs, AsKey.class);
+        if (null != args && args.size() != 0 && args.get(0) instanceof Boolean) {
+            return (Boolean) args.get(0);
+        }
+        return true;
+    }
+
 
     /**
      * 生成作为缓存的key
