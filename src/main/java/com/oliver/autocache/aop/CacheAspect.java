@@ -54,20 +54,18 @@ public class CacheAspect {
         //缓存key
         String key = genKey(totalArgs, method, baseKey);
 
-        //如果condition注解标记的参数为false，则不使用换成，直接运行返回
-        if (!genCondition(totalArgs, method)) {
-            return pjp.proceed();
-        }
-
-        //缓存处理
-        try {
-            if (cacheHelper.contain(key)) {
-                return cacheHelper.get(key);
+        //如果condition注解标记的参数为false，则不使用换成，直接运行返回（同时刷新缓存中的结果）
+        if (genCondition(totalArgs, method)) {
+            //缓存处理
+            try {
+                if (cacheHelper.contain(key)) {
+                    return cacheHelper.get(key);
+                }
+            } catch (Exception e) {
+                //选择catch而不抛出的考虑是因为缓存属于附属功能，不应该影响正常业务程序的调用
+                e.printStackTrace();
+                //throw new CacheException("缓存获取出错！", e);
             }
-        } catch (Exception e) {
-            //选择catch而不抛出的考虑是因为缓存属于附属功能，不应该影响正常业务程序的调用
-            e.printStackTrace();
-            //throw new CacheException("缓存获取出错！", e);
         }
 
 
