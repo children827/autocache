@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class InjectClazz {
 
-    @Cache(baseKey = "",time = CacheTime.TIME_SHORT)
+    @Cache(time = CacheTime.TIME_SHORT)
     public String show(@AsKey String s,@AsKey String s1){
         System.out.println("这里显示");
         return "返回";

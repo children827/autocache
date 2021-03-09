@@ -3,6 +3,7 @@ package com.oliver.autocache.aop;
 import com.oliver.autocache.Exception.CacheException;
 import com.oliver.autocache.annotation.AsKey;
 import com.oliver.autocache.annotation.Cache;
+import com.oliver.autocache.annotation.Condition;
 import com.oliver.autocache.cache.CacheFactory;
 import com.oliver.autocache.cache.CacheManager;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,6 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.List;
 @Component
 public class CacheAspect {
 
-    @Autowired
+    @Resource
     private CacheFactory cacheFactory;
 
 
@@ -105,8 +107,15 @@ public class CacheAspect {
     }
 
 
+    /**
+     * 判断是否需要从缓存中取数据(只有第一个有效)
+     * @param totalArgs
+     * @param method
+     * @return
+     * @throws Exception
+     */
     private boolean genCondition(Object[] totalArgs, Method method) throws Exception {
-        List<Object> args = getParamValueByAnnotation(method, totalArgs, AsKey.class);
+        List<Object> args = getParamValueByAnnotation(method, totalArgs, Condition.class);
         if (null != args && args.size() != 0 && args.get(0) instanceof Boolean) {
             return (Boolean) args.get(0);
         }

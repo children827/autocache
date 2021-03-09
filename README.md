@@ -50,3 +50,5 @@ public class InjectClazz {
 4.缓存key生成策略：
       @Cache的baseKey属性作为缓存的基础key，在此基础上会再加上被@AsKey注解标注的参数，共同作为缓存的最终key
       如果未设置，会将被注释的类的签名作为baseKey的默认值
+
+5.需在主启动类上加上spring扫描路径，将“com.oliver”加上去，这样才能注入切面方法
